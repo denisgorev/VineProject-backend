@@ -1,9 +1,17 @@
 const DrinkConsump = require("../models/drink_consumption");
 
+const dateGetter = () => {
+	let d = new Date();
+	let day = d.getDate();
+	let month = d.getMonth() + 1;
+    let year = d.getFullYear();
+    return date = day + "." + month + "." + year;
+    
+};
 const createDC = async (req, res, next) => {
 	const {
-        // user,
-        name,
+		// user,
+		name,
 		alcoKind,
 		alcoType,
 		country,
@@ -15,8 +23,8 @@ const createDC = async (req, res, next) => {
 	} = req.body;
 
 	const createdDC = new DrinkConsump({
-        user: "u1",
-        name,
+		user: "u1",
+		name,
 		alcoKind,
 		alcoType,
 		country,
@@ -24,6 +32,7 @@ const createDC = async (req, res, next) => {
 		rate,
 		appetizer,
 		comment,
+		date: dateGetter(),
 		photo: "https://www.meme-arsenal.com/memes/540a89cc082cfe1168fc3030f7bcc43d.jpg",
 	});
 
@@ -48,24 +57,35 @@ const getDCbyUserId = async (req, res, next) => {
 		console.log(err);
 		return next(err);
 	}
-    res.json({ drinkCons: DCs.map((DC) => DC.toObject({ getters: true })) });
-
+	res.json({ drinkCons: DCs.map((DC) => DC.toObject({ getters: true })) });
 };
 
 const getDCbyId = async (req, res, next) => {
-    const DCId = req.params.did;
-    let DC;
-    try {
-        DC = await DrinkConsump.find({_id: DCId})
-        console.log("get request getDCbyId");
-    } catch (err) {
-        console.log(err);
-        return next(err);
-    }
-    res.json({ drink: DC});
+	const DCId = req.params.did;
+	let DC;
+	try {
+		DC = await DrinkConsump.find({ _id: DCId });
+		console.log("get request getDCbyId");
+	} catch (err) {
+		console.log(err);
+		return next(err);
+	}
+	res.json({ drink: DC });
+};
 
-}
+const deleteById = async (req, res, next) => {
+	const CDId = req.params.did;
+
+	try {
+		await DrinkConsump.findByIdAndDelete(CDId);
+	} catch (err) {
+		console.log(err);
+		return next(err);
+	}
+	res.json({ message: "successfully deleted" });
+};
 
 exports.getDCbyId = getDCbyId;
+exports.deleteById = deleteById;
 exports.createDC = createDC;
 exports.getDCbyUserId = getDCbyUserId;

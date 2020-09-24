@@ -9,6 +9,7 @@ console.log('in routes')
 
 router.get('/users/:uid', drConsController.getDCbyUserId);
 router.get('/:did', drConsController.getDCbyId);
+router.delete('/delete/:did', drConsController.deleteById)
 
 
 router.post('/', drConsController.createDC)
