@@ -9,6 +9,7 @@ const dateGetter = () => {
     
 };
 const createDC = async (req, res, next) => {
+    console.log(req.file.path)
 	const {
 		// user,
 		name,
@@ -33,7 +34,7 @@ const createDC = async (req, res, next) => {
 		appetizer,
 		comment,
 		date: dateGetter(),
-		photo: "https://www.meme-arsenal.com/memes/540a89cc082cfe1168fc3030f7bcc43d.jpg",
+		photo: 'http://192.168.0.16:5000/' + req.file.path,
 	});
 
 	try {
@@ -84,6 +85,7 @@ const deleteById = async (req, res, next) => {
 	}
 	res.json({ message: "successfully deleted" });
 };
+
 
 exports.getDCbyId = getDCbyId;
 exports.deleteById = deleteById;

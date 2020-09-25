@@ -1,13 +1,17 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const multer = require('multer')
 require('dotenv').config()
+const path = require('path')
 
 const dcRoutes = require("./routes/dc-routes");
 
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use('/upload/images', express.static(path.join('upload', 'images')))
 
 app.use((req, res, next) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
