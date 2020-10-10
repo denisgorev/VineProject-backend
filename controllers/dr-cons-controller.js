@@ -1,4 +1,5 @@
 const DrinkConsump = require("../models/drink_consumption");
+const fs = require ('fs')
 
 const dateGetter = () => {
 	let d = new Date();
@@ -11,7 +12,7 @@ const dateGetter = () => {
 const createDC = async (req, res, next) => {
     console.log(req.file.path)
 	const {
-		// user,
+		user,
 		name,
 		alcoKind,
 		alcoType,
@@ -24,7 +25,7 @@ const createDC = async (req, res, next) => {
 	} = req.body;
 
 	const createdDC = new DrinkConsump({
-		user: "u1",
+		user,
 		name,
 		alcoKind,
 		alcoType,
@@ -75,16 +76,22 @@ const getDCbyId = async (req, res, next) => {
 };
 
 const deleteById = async (req, res, next) => {
-	const CDId = req.params.did;
+    const CDId = req.params.did;
+    const deletingPlace = await DrinkConsump.findById(CDId)
+    const imagePath = deletingPlace.photo;
+    console.log(imagePath)
 
 	try {
 		await DrinkConsump.findByIdAndDelete(CDId);
 	} catch (err) {
 		console.log(err);
 		return next(err);
-	}
+    }
+    // fs.unlink(path.join("../", "public", imagePath), err => {console.log(err)})
 	res.json({ message: "successfully deleted" });
 };
+
+
 
 
 exports.getDCbyId = getDCbyId;
